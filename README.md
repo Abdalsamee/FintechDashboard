@@ -16,15 +16,16 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 
 ## 📸 Preview
 
-### Dark Mode
-![Dashboard Dark](screenshots/dashboard_dark.jpeg)
+<div align="center">
 
-### Light Mode
-![Dashboard Light](screenshots/dashboard_light.png)
+<table>
+  <tr>
+    <td><img src="screenshots/dashboard_dark.jpeg" width="100%"/></td>
+    <td><img src="screenshots/dashboard_light.png" width="100%"/></td>
+  </tr>
+</table>
 
----
-
-The dashboard features a deep navy dark theme with emerald green accents, smooth entrance animations, an animated balance counter, and a responsive 2×2 stats grid — all built entirely with Jetpack Compose and zero XML.
+</div>
 
 ---
 
