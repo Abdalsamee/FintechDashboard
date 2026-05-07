@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.fintechdashboard.data.Transaction
+import com.example.fintechdashboard.domain.models.Transaction
 import com.example.fintechdashboard.ui.theme.Emerald
 import com.example.fintechdashboard.ui.theme.RedAccent
 import com.example.fintechdashboard.ui.theme.TextSecondary
@@ -82,11 +82,6 @@ fun TransactionItem(transaction: Transaction, animationDelay: Int = 0) {
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = transaction.category,
-                style = MaterialTheme.typography.bodySmall,
-                color = TextSecondary
-            )
         }
 
         Column(horizontalAlignment = Alignment.End) {

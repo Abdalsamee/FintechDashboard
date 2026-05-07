@@ -36,7 +36,7 @@ import com.example.fintechdashboard.ui.theme.TextSecondary
 import java.util.Calendar
 
 @Composable
-fun HeaderSection() {
+fun HeaderSection(name: String) {
     val alpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
@@ -66,7 +66,7 @@ fun HeaderSection() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "M",
+                text = name.first().uppercaseChar().toString(),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Emerald
@@ -82,7 +82,7 @@ fun HeaderSection() {
                 color = TextSecondary
             )
             Text(
-                text = "Mohammad",
+                text = name,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )

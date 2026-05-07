@@ -39,9 +39,14 @@ import com.example.fintechdashboard.ui.theme.TextSecondary
 import kotlin.math.roundToInt
 
 @Composable
-fun BalanceCard() {
-    val animatedBalance = remember { Animatable(0f) }
-    val targetBalance = 12450f
+fun BalanceCard(
+    balance: Double,
+    income: Double,
+    expenses: Double,
+    savings: Double
+) {
+    val animatedBalance = remember(balance) { Animatable(0f) }
+    val targetBalance = balance.toFloat()
 
     LaunchedEffect(Unit) {
         animatedBalance.animateTo(
@@ -148,9 +153,9 @@ fun BalanceCard() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                BalanceStat(label = "Income", amount = "+\$5,180", color = Emerald)
-                BalanceStat(label = "Expenses", amount = "-\$522", color = Color(0xFFFF4D6A))
-                BalanceStat(label = "Savings", amount = "\$3,200", color = BlueAccent)
+                BalanceStat(label = "Income", amount = "+${"%.0f".format(income)}", color = Emerald)
+                BalanceStat(label = "Expenses", amount = "-${"%.0f".format(expenses)}", color = Color(0xFFFF4D6A))
+                BalanceStat(label = "Savings", amount = "${"%.0f".format(savings)}", color = BlueAccent)
             }
         }
     }

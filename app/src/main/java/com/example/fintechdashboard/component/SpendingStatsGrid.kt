@@ -12,14 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -27,30 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.fintechdashboard.ui.theme.AmberAccent
-import com.example.fintechdashboard.ui.theme.BlueAccent
-import com.example.fintechdashboard.ui.theme.Emerald
-import com.example.fintechdashboard.ui.theme.RedAccent
+import com.example.fintechdashboard.domain.models.Stat
 import com.example.fintechdashboard.ui.theme.TextSecondary
 import kotlinx.coroutines.delay
 
-data class StatItem(
-    val label: String,
-    val value: String,
-    val subLabel: String,
-    val color: Color,
-    val progressFraction: Float
-)
-
 @Composable
-fun SpendingStatsGrid() {
-    val stats = listOf(
-        StatItem("Spent", "\$522", "of \$1,200 budget", RedAccent, 0.44f),
-        StatItem("Saved", "\$3,200", "this month", Emerald, 0.72f),
-        StatItem("Investments", "\$8,400", "+4.2% this week", BlueAccent, 0.68f),
-        StatItem("Pending", "\$340", "3 transactions", AmberAccent, 0.28f)
-    )
-
+fun SpendingStatsGrid(stats: List<Stat>) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
@@ -58,8 +38,8 @@ fun SpendingStatsGrid() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            StatCard(stat = stats[0], animDelay = 0, modifier = Modifier.weight(1f))
-            StatCard(stat = stats[1], animDelay = 80, modifier = Modifier.weight(1f))
+            if (stats.size > 0) StatCard(stat = stats[0], animDelay = 0,   modifier = Modifier.weight(1f))
+            if (stats.size > 1) StatCard(stat = stats[1], animDelay = 80,  modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -68,14 +48,14 @@ fun SpendingStatsGrid() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            StatCard(stat = stats[2], animDelay = 160, modifier = Modifier.weight(1f))
-            StatCard(stat = stats[3], animDelay = 240, modifier = Modifier.weight(1f))
+            if (stats.size > 2) StatCard(stat = stats[2], animDelay = 160, modifier = Modifier.weight(1f))
+            if (stats.size > 3) StatCard(stat = stats[3], animDelay = 240, modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
-fun StatCard(stat: StatItem, animDelay: Int, modifier: Modifier = Modifier) {
+private fun StatCard(stat: Stat, animDelay: Int, modifier: Modifier = Modifier) {
     val alpha = remember { Animatable(0f) }
     val progressAnim = remember { Animatable(0f) }
 
@@ -118,7 +98,7 @@ fun StatCard(stat: StatItem, animDelay: Int, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Thin progress bar
+            // Progress bar track
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

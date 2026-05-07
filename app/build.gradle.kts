@@ -41,6 +41,21 @@ android {
 
 dependencies {
 
+    // --- Existing Compose dependencies (keep yours) ---
+
+    // Retrofit + Gson
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    // OkHttp logging interceptor (shows API calls in Logcat during dev)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // ViewModel + Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
     implementation("androidx.compose.material:material-icons-extended")
 
