@@ -8,7 +8,7 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-1.6+-4285F4?style=flat&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9+-7F52FF?style=flat&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Material 3](https://img.shields.io/badge/Material%203-Design-757575?style=flat&logo=material-design&logoColor=white)](https://m3.material.io)
-[![Retrofit](https://img.shields.io/badge/Retrofit-2.11-48B983?style=flat)](https://square.github.io/retrofit)
+[![Retrofit](https://img.shields.io/badge/Retrofit-2.11.0-48B983?style=flat)](https://square.github.io/retrofit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
 </div>
@@ -18,6 +18,7 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 ## 📸 Preview
 
 <div align="center">
+
 <table>
 <tr>
 <td align="center">
@@ -33,6 +34,7 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 </td>
 </tr>
 </table>
+
 </div>
 
 ---
@@ -57,21 +59,22 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 
 ## 🛠 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language | Kotlin |
-| UI Framework | Jetpack Compose |
-| Design System | Material 3 |
-| Icons | Material Icons Extended |
-| Animation | Compose `Animatable`, `spring`, `tween` |
-| Networking | Retrofit 2.11 + Gson |
-| HTTP Client | OkHttp + Logging Interceptor |
-| State Management | ViewModel + `StateFlow` + `sealed class` |
-| Concurrency | Kotlin Coroutines (`async`/`await`) |
-| Architecture | MVVM + Repository Pattern |
-| API | MockAPI REST |
-| Min SDK | 26 (Android 8.0) |
-| Target SDK | 34 (Android 14) |
+| Layer | Technology | Version |
+|---|---|---|
+| Language | Kotlin | 1.9+ |
+| UI Framework | Jetpack Compose | 1.6+ |
+| Design System | Material 3 | — |
+| Icons | Material Icons Extended | — |
+| Animation | Compose `Animatable`, `spring`, `tween` | — |
+| Networking | Retrofit 2 + Gson Converter | 2.11.0 |
+| HTTP Client | OkHttp + Logging Interceptor | 4.12.0 |
+| State Management | ViewModel + `StateFlow` + `sealed class` | — |
+| Concurrency | Kotlin Coroutines (`async` / `await`) | 1.8.1 |
+| Lifecycle | `lifecycle-viewmodel-compose`, `lifecycle-runtime-ktx` | 2.8.0 |
+| Architecture | MVVM + Repository Pattern | — |
+| Mock API | MockAPI.io | — |
+| Min SDK | API 26 (Android 8.0) | — |
+| Target SDK | API 34 (Android 14) | — |
 
 ---
 
@@ -197,14 +200,14 @@ For a detailed breakdown of each file and composable, refer to the [full documen
 
 The app connects to a MockAPI project with two endpoints:
 
-| Endpoint | Method | Description |
+| Endpoint | Method | Returns |
 |---|---|---|
-| `/profile` | `GET` | Returns user name, balance, income, expenses, savings, and stats array |
-| `/transactions` | `GET` | Returns list of recent transactions |
+| `/profile` | `GET` | User name, balance, income, expenses, savings, and stats array |
+| `/transactions` | `GET` | List of recent transactions |
 
 The base URL is configured in `network/RetrofitClient.kt`. To point the app at a different API, update the `BASE_URL` constant there.
 
-> **Note:** API responses are logged in full in Logcat during debug builds via `HttpLoggingInterceptor`. This is automatically inactive in release builds.
+> **Note:** Full request and response bodies are logged in Logcat during debug builds via `HttpLoggingInterceptor` at `BODY` level.
 
 ---
 
