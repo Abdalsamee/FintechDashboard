@@ -8,6 +8,7 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-1.6+-4285F4?style=flat&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9+-7F52FF?style=flat&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Material 3](https://img.shields.io/badge/Material%203-Design-757575?style=flat&logo=material-design&logoColor=white)](https://m3.material.io)
+[![Retrofit](https://img.shields.io/badge/Retrofit-2.11-48B983?style=flat)](https://square.github.io/retrofit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
 </div>
@@ -17,32 +18,32 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 ## 📸 Preview
 
 <div align="center">
-
 <table>
-  <tr>
-    <td align="center">
-      <img src="screenshots/dashboard_dark.jpeg" width="200"/>
-      <br/>
-      <sub><b>🌙 Dark Mode</b></sub>
-    </td>
-
-<td width="30"></td>
-
+<tr>
 <td align="center">
-  <img src="screenshots/dashboard_light.jpg" width="200"/>
-  <br/>
-  <sub><b>☀️ Light Mode</b></sub>
+<img src="screenshots/dashboard_dark.jpeg" width="200"/>
+<br/>
+<sub><b>🌙 Dark Mode</b></sub>
 </td>
-
-  </tr>
+<td width="30"></td>
+<td align="center">
+<img src="screenshots/dashboard_light.jpg" width="200"/>
+<br/>
+<sub><b>☀️ Light Mode</b></sub>
+</td>
+</tr>
 </table>
-
 </div>
 
 ---
 
 ## ✨ Features
 
+- **Live API Data** — All content fetched from a real REST API via Retrofit with Gson deserialization
+- **MVI-lite State Management** — `sealed class UiState` with `Loading`, `Success`, `Error`, and `Refreshing` states
+- **Shimmer Loading Skeleton** — Animated placeholder layout that mirrors the real UI while data loads
+- **Pull-to-Refresh** — Material 3 `PullToRefreshBox` keeps existing data visible while re-fetching
+- **Error Screen with Retry** — Friendly error state with a one-tap retry button
 - **Animated Balance Card** — Balance counts up from zero on load with a gradient dark card and decorative layered background
 - **Quick Actions** — Send, Receive, Pay, and Scan shortcuts with spring-physics press animations and per-action accent colors
 - **Spending Stats Grid** — 2×2 card grid displaying Spent, Saved, Investments, and Pending with animated progress bars
@@ -63,9 +64,44 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 | Design System | Material 3 |
 | Icons | Material Icons Extended |
 | Animation | Compose `Animatable`, `spring`, `tween` |
-| Architecture | Single-screen component architecture |
+| Networking | Retrofit 2.11 + Gson |
+| HTTP Client | OkHttp + Logging Interceptor |
+| State Management | ViewModel + `StateFlow` + `sealed class` |
+| Concurrency | Kotlin Coroutines (`async`/`await`) |
+| Architecture | MVVM + Repository Pattern |
+| API | MockAPI REST |
 | Min SDK | 26 (Android 8.0) |
 | Target SDK | 34 (Android 14) |
+
+---
+
+## 🏗 Architecture
+
+The app follows a clean layered architecture with strict separation between network, domain, and UI concerns.
+
+```
+MockAPI REST
+    ↓
+ApiService (Retrofit — DTOs)
+    ↓
+DashboardRepositoryImpl (DTO → Domain mapping, Result<T> wrapping)
+    ↓
+DashboardViewModel (StateFlow<DashboardUiState>)
+    ↓
+DashboardScreen (collectAsStateWithLifecycle)
+    ↓
+UI Components
+```
+
+### UiState lifecycle
+
+```
+App launch
+    └── Loading → shimmer skeleton
+            ├── Success → full dashboard
+            │       └── Pull-to-refresh → Refreshing → Success / Error
+            └── Error → error screen + retry → Loading
+```
 
 ---
 
@@ -93,7 +129,7 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 
 3. **Sync Gradle**
 
-   Android Studio will prompt you to sync. Click **Sync Now**. This will download all required dependencies including `material-icons-extended`.
+   Android Studio will prompt you to sync. Click **Sync Now**. This downloads all required dependencies including Retrofit and `material-icons-extended`.
 
 4. **Run the app**
 
@@ -115,7 +151,32 @@ com.example.fintechdashboard/
 ├── MainActivity.kt
 ├── DashboardScreen.kt
 │
+├── network/
+│   ├── ApiService.kt
+│   ├── RetrofitClient.kt
+│   └── models/
+│       ├── ProfileDto.kt
+│       ├── TransactionDto.kt
+│       └── StatDto.kt
+│
+├── domain/
+│   └── models/
+│       ├── Profile.kt
+│       ├── Transaction.kt
+│       └── Stat.kt
+│
+├── repository/
+│   ├── DashboardRepository.kt
+│   └── DashboardRepositoryImpl.kt
+│
+├── viewmodel/
+│   ├── DashboardUiState.kt
+│   └── DashboardViewModel.kt
+│
 ├── component/
+│   ├── ShimmerEffect.kt
+│   ├── DashboardSkeleton.kt
+│   ├── ErrorState.kt
 │   ├── HeaderSection.kt
 │   ├── BalanceCard.kt
 │   ├── QuickActionsSection.kt
@@ -123,15 +184,27 @@ com.example.fintechdashboard/
 │   ├── TransactionItem.kt
 │   └── SectionLabel.kt
 │
-├── data/
-│   └── TransactionData.kt
-│
 └── ui/theme/
     ├── Theme.kt
     └── Type.kt
 ```
 
 For a detailed breakdown of each file and composable, refer to the [full documentation](DOCUMENTATION.md).
+
+---
+
+## 🌐 API
+
+The app connects to a MockAPI project with two endpoints:
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/profile` | `GET` | Returns user name, balance, income, expenses, savings, and stats array |
+| `/transactions` | `GET` | Returns list of recent transactions |
+
+The base URL is configured in `network/RetrofitClient.kt`. To point the app at a different API, update the `BASE_URL` constant there.
+
+> **Note:** API responses are logged in full in Logcat during debug builds via `HttpLoggingInterceptor`. This is automatically inactive in release builds.
 
 ---
 
@@ -159,11 +232,10 @@ Contributions are welcome and appreciated. To contribute:
 - Follow the existing composable structure — one responsibility per file
 - Maintain the established color token system; do not use raw hex values directly in composables
 - Ensure all new components include entrance animations consistent with the rest of the UI
+- The ViewModel must never reference DTOs — all data passed to the UI must be domain models
 - Test on both dark and light themes before submitting
 
 ---
-
-
 
 <div align="center">
   Built with ❤️ using Jetpack Compose
