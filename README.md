@@ -20,8 +20,20 @@ A modern, dark-themed personal finance dashboard built with Jetpack Compose for 
 
 <table>
   <tr>
-    <td><img src="screenshots/dashboard_dark.jpeg" width="100%"/></td>
-    <td><img src="screenshots/dashboard_light.png" width="100%"/></td>
+    <td align="center">
+      <img src="screenshots/dashboard_dark.jpeg" width="200"/>
+      <br/>
+      <sub><b>🌙 Dark Mode</b></sub>
+    </td>
+
+<td width="30"></td>
+
+<td align="center">
+  <img src="screenshots/dashboard_light.jpg" width="200"/>
+  <br/>
+  <sub><b>☀️ Light Mode</b></sub>
+</td>
+
   </tr>
 </table>
 
